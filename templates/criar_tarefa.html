@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tarefas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="{{ url_for('static', filename='estilo.css') }}" rel="stylesheet">
+<body>
+    <div id="formulario">
+        <h2>Lista de Tarefas</h2>
+        <form method="post" action="/inserir">
+            <div class="mb-3">
+            <input type="text" class="form-control" name="taref">
+            </div>
+            <div id="btn">
+                <button type="submit" class="btn btn-primary">Criar</button>
+            </div>
+        </form>
+    </div> 
+    <div>
+        {% block content %}
+        <div id="formulario">
+            <table class="table table-striped">
+                 <thead>
+                     <tr>
+                         
+                         <th>Tarefa</th>
+                         <th>Data Criação</th>
+                         <th>Status</th>
+                         <th>Excluir Tarefa</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                    {% for lista in listaT %}
+                     <tr>
+                         {% if lista[4] == 1 %}
+    
+                         <td><del> {{ lista[1] }} </del></td>
+                         <td><del>{{ lista[2].strftime('%d/%m/%Y %H:%M:%S') }}</del></td>
+                         <td>-</td>
+                         <td>
+                            <form method="post" action="/exclui">
+                               <input type="text" value="{{ lista[0] }}" hidden name="numID">
+                               <button type="submit" class="btn btn-danger">Excluir</button>
+                            </form>
+                        </td>
+                         {% else %}
+                         <td>{{ lista[1] }}</td>
+                         <td>{{ lista[2].strftime('%d/%m/%Y %H:%M:%S') }}</td>
+                         <td>
+                            <form method="post" action="/realizada">
+                                <input type="text" value="{{ lista[0] }}" hidden name="idList">
+                                <input type="submit" value="Finalizar">
+                            </form>
+                         </td>
+                         <td>
+                             <form method="post" action="/exclui">
+                                <input type="text" value="{{ lista[0] }}" hidden name="numID">
+                                <button type="submit" class="btn btn-danger">Excluir</button>
+                             </form>
+                         </td>
+                         
+                         {% endif %}
+                     </tr>
+                    {% endfor %}
+                 </tbody>
+            </table>
+         </div>      
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    {% endblock %}
+</body>
+</html>
